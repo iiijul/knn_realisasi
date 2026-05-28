@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler
-import Orange.data
 
 # ============================================================================
 # PAGE CONFIGURATION
@@ -146,16 +145,11 @@ with col_pred:
         'tipe_satker_Tugas Pembantuan': [1 if tipe_satker == 'Tugas Pembantuan' else 0]
     })
     
-    # Buat Orange Table dari input
     try:
-        domain = model.domain
-        input_orange = Orange.data.Table.from_list(
-            domain, 
-            [list(input_encoded.iloc[0].values)]
-        )
-        
-        # Prediksi - gunakan sklearn model langsung untuk konsistensi
+        # Persiapan data dan prediksi
         X_input = input_encoded.values
+        
+        # Ekstrak sklearn model untuk prediksi
         skl_model = model.skl_model
         
         # Get class prediction
@@ -163,7 +157,6 @@ with col_pred:
         
         # Get probabilities
         proba = skl_model.predict_proba(X_input)[0]
-        class_names = ['Tidak', 'Ya']  # Based on domain
         
         # Map class to name
         if class_pred == 0:
